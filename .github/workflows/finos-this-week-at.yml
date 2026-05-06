@@ -58,6 +58,15 @@ jobs:
           mkdir -p output
           node scripts/finos-weekly-calendar.mjs
 
+      - name: Prepare GitHub Pages file
+        shell: bash
+        run: cp output/finos-this-month.html output/index.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: output
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -67,3 +76,17 @@ jobs:
             output/finos-this-month.html
           if-no-files-found: error
           retention-days: 90
+
+  deploy-pages:
+    needs: digest
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
