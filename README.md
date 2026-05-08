@@ -1,4 +1,4 @@
-# FINOS Calendar Scrape
+# finos-calendar-digest
 
 Generates a monthly "This Week At FINOS" digest.
 
